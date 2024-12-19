@@ -24,7 +24,7 @@ const DateRangePicker = ({ onDateRangeChange }) => {
   };
 
   return (
-    <div className="flex gap-4 items-center">
+    <>
     
       <label className='text-gray-100'>From</label>
       {/* Start Date Picker */}
@@ -51,7 +51,7 @@ const DateRangePicker = ({ onDateRangeChange }) => {
         placeholderText="End Date"
         dateFormat="MM/dd/yyyy"
       />
-    </div>
+    </>
   );
 };
 

@@ -61,30 +61,31 @@ const Reports = () => {
     };
     return (
         <>
-            <div className='ml-3 mt-[80px]  flex gap-[40px]'>
+            <div className='ml-3 mt-[80px]  lg:flex gap-[40px]'>
                 <Multiselection options={options} onSelectionChange={handleSelectionChange} />
                 <p className='text-gray-100 p-3'>Select Date</p>
                 <DateRangePicker onDateRangeChange={handleDateRangeChange} />
+                <button className='text-gray-100 bg-green-500 rounded-lg p-3' onClick={() => {
+                    HandleHTTP();
+                }}>Download</button>
 
             </div>
             <div className='text-gray-100 h-[1000px]'>
-                <button className='text-gray-100' onClick={() => {
-                    HandleHTTP();
-                }}>Download</button>
+               
                 {/* Loop through each broken reason and render a table */}
                 {Object.keys(groupedData).map((reason) => (
 
-                     <div key={reason}>
+                     <div key={reason} className='ml-3'>
                       {selecteitems.some(item => item === reason) && 
                       <div>
                         <h1>{reason}</h1>
-                      <table className="table-auto border-collapse border border-gray-200 mb-4">
+                      <table className=" table-auto border-collapse border border-gray-200 mb-4">
                       <thead>
                           <tr>
                               <th className="border border-gray-300 px-4 py-2">Date</th>
-                              <th className="border border-gray-300 px-4 py-2">Running Time</th>
-                              <th className="border border-gray-300 px-4 py-2">Breaking Time</th>
-                              <th className="border border-gray-300 px-4 py-2">Durarion</th>
+                              <th className="border border-gray-300 px-4 py-2">Start</th>
+                              <th className="border border-gray-300 px-4 py-2">End</th>
+                              <th className="border border-gray-300 px-4 py-2">Durarion(Min)</th>
 
                           </tr>
                       </thead>
