@@ -11,7 +11,7 @@ const DateRangePicker = ({ onDateRangeChange }) => {
     setStartDate(date);
     // If there's already an end date, pass both start and end to the parent
     if (endDate) {
-      onDateRangeChange(format(date, 'MM/dd/yyyy'), format(endDate, 'MM/dd/yyyy'));
+      onDateRangeChange(format(date, 'yyyy/MM/dd'), format(endDate, 'yyyy/MM/dd'));
     }
   };
 
@@ -19,14 +19,14 @@ const DateRangePicker = ({ onDateRangeChange }) => {
     setEndDate(date);
     // If there's already a start date, pass both start and end to the parent
     if (startDate) {
-      onDateRangeChange(format(startDate, 'MM/dd/yyyy'), format(date, 'MM/dd/yyyy'));
+      onDateRangeChange(format(startDate, 'yyyy/MM/dd'), format(date, 'yyyy/MM/dd'));
     }
-  };
+  };    
 
   return (
     <>
     
-      <label className='text-gray-100'>From</label>
+    
       {/* Start Date Picker */}
       <DatePicker
         selected={startDate}
@@ -34,11 +34,11 @@ const DateRangePicker = ({ onDateRangeChange }) => {
         selectsStart
         startDate={startDate}
         endDate={endDate}
-        className="p-3 border border-gray-300 rounded-md "
+        className="m-5 text-black bg-gray-300 rounded-lg p-3 w-28"
         placeholderText="Start Date"
         dateFormat="MM/dd/yyyy"
       />
-     <label className='text-gray-100'>To </label>
+     
       {/* End Date Picker */}
       <DatePicker
         selected={endDate}
@@ -47,10 +47,12 @@ const DateRangePicker = ({ onDateRangeChange }) => {
         startDate={startDate}
         endDate={endDate}
         minDate={startDate} // Ensure end date can't be before start date
-        className="p-3 border border-gray-300 rounded-md"
+        className="m-5 text-black bg-gray-300 rounded-lg p-3 w-28"
         placeholderText="End Date"
         dateFormat="MM/dd/yyyy"
+       
       />
+   
     </>
   );
 };

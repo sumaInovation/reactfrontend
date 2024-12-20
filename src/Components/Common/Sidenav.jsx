@@ -19,10 +19,16 @@ const SIDEBAR_ITEMS = [
 
 const Sidenav = ({minWidth}) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+
+    const scrollToTop = () => {
+        window.scrollTo(0, 0); // Scroll to the top of the page (0px from top)
+      };
+
   return (
     <div>
        {SIDEBAR_ITEMS.map((item) => (
-                        <Link key={item.href} to={item.href}>
+                        <Link key={item.href} to={item.href} onClick={()=>scrollToTop()}>
                             <motion.div className='flex items-center p-4 text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors mb-2'>
                                 <item.icon size={20} style={{ color: item.color, minWidth: "20px" }} />
                                 <AnimatePresence>

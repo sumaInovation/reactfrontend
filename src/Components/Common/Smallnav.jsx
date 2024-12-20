@@ -18,12 +18,19 @@ const SIDEBAR_ITEMS = [
 ];
 
 const Smallnav = ({sendValueToParent}) => {
+
+    const scrollToTop = () => {
+        window.scrollTo(0, 0); // Scroll to the top of the page (0px from top)
+      };
+      
   return (
     <>
     
     
        {SIDEBAR_ITEMS.map((item) => (
-                        <Link key={item.href} to={item.href}  onClick={()=>sendValueToParent(false)}>
+                        <Link key={item.href} to={item.href}  onClick={()=>{sendValueToParent(false)
+                        scrollToTop();
+                        }}>
                             <motion.div className='flex items-center p-4 text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors mb-2'>
                                 <item.icon size={20} style={{ color: item.color, minWidth: "20px" }} />
                                 <AnimatePresence>

@@ -43,6 +43,10 @@ const LayoutWithSidebar = () => {
     if (screenWidth < 1000) {
       dynamicValue =0;  // For small screens (mobile)
     } 
+
+    const scrollToTop = () => {
+      window.scrollTo(0, 0); // Scroll to the top of the page (0px from top)
+    };
  
   return (
     <>
@@ -50,7 +54,9 @@ const LayoutWithSidebar = () => {
     <header className='z-50 fixed top-0 left-0 w-full bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg border-b border-gray-700'>
 			<div className='max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between'>
 				<h1 className='text-2xl font-semibold text-gray-100 '>PPT Inovation</h1>
-        <p className='lg:hidden text-white'><Menu size={24} onClick={()=>setMobilenav(!Mobilenav)}/></p>
+        <p className='lg:hidden text-white'><Menu size={24} onClick={()=>{setMobilenav(!Mobilenav)
+          scrollToTop();
+        }}/></p>
        </div>
 		</header>
     <div className="flex h-screen">
@@ -68,6 +74,7 @@ const LayoutWithSidebar = () => {
           }else{
             setSidebarWidth(256)
           }
+          scrollToTop();
         }} />
         </div>
       

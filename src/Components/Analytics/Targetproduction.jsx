@@ -34,8 +34,36 @@ const ThisMonth = [
 ];
 
 const Targetproduction = () => {
+	const [startDate, setStartDate] = useState('');
+	const [endDate, setEndDate] = useState('');
 	const [selectedTimeRange, setSelectedTimeRange] = useState("This Month");
 	const [selectdatapakage, setSelectdatapakage] = useState(ThisMonth);
+
+	const getWeekStartAndEnd = () => {//Set This Week Timespand
+		const today = new Date();
+		const dayOfWeek = today.getDay(); // Get the day of the week (0 - Sunday, 6 - Saturday)
+		
+		// Calculate the start date (Sunday)
+		const start = new Date(today);
+		start.setDate(today.getDate() - dayOfWeek); // Subtract dayOfWeek to get to Sunday
+		
+		// Calculate the end date (Saturday)
+		const end = new Date(today);
+		end.setDate(today.getDate() + (6 - dayOfWeek)); // Add (6 - dayOfWeek) to get to Saturday
+		
+		// Format dates as yyyy-mm-dd
+		const startFormatted = start.toISOString().split('T')[0];
+		const endFormatted = end.toISOString().split('T')[0];
+		
+		setStartDate(startFormatted);
+		setEndDate(endFormatted);
+	  };
+
+	  const Fechdata=()=>{
+
+
+		
+	  }
 
 	return (
 		<motion.div

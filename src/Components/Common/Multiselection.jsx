@@ -24,16 +24,17 @@ const Multiselection = ({options, onSelectionChange}) => {
                 if(isOpen)onSelectionChange(selectedOptions)
               }
               }
-              className="px-4 py-2 bg-gray-400 text-white rounded-md focus:outline-none w-full"
+              className="m-5 text-gray-100 bg-gray-600 rounded-lg px-20 py-3"
             >
-              {selectedOptions.length === 0
-                ? 'Select options'
-                : `${selectedOptions.length} option(s) selected`}
+              {/* {selectedOptions.length === 0
+                ? 'options'
+                : `${selectedOptions.length} option(s) selected`} */}
+                Options
             </button>
       
             {/* Dropdown Menu */}
             {isOpen && (
-              <div className="absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
+              <div className="   absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
                 <ul className="max-h-60 overflow-y-auto">
                   {options.map((option) => (
                     <li
@@ -48,7 +49,7 @@ const Multiselection = ({options, onSelectionChange}) => {
                         }
                         
                         }}
-                        className="mr-2"
+                  
                       />
                       {option}
                     </li>

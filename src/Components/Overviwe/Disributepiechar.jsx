@@ -4,13 +4,13 @@ import { useWebSocket } from "../Common/WebSocketContext";
 import { useEffect, useState } from "react";
 
 
-const COLORS = ["#00FF53", "#FF0000", "#EC4899"];
+const COLORS = ["#00FF53", "#FF0000", "#EC4899","#00FF43", "#0000FF", "#9FE2BF"];
 
 const Disributepiechar = () => {
 	const [runttime, setRuntime] = useState(0);
 	const [downtime, setDowntime] = useState(0);
-	const[currentrun,setCurrentrun]=useState(0);
-	const[currentdown,setCurrentdown]=useState(0);
+	const [currentrun, setCurrentrun] = useState(0);
+	const [currentdown, setCurrentdown] = useState(0);
 	const { messages } = useWebSocket();
 	const { todayTotalRun,
 		todatTotalBreake,
@@ -19,8 +19,12 @@ const Disributepiechar = () => {
 
 	const [userData, setUerData] = useState([
 		{ name: 'RunTime', value: 50 },
-		{ name: 'DownTime', value: 25 },
-		{ name: 'Others', value: 25 },
+		{ name: 'Taype Detect', value: 25 },
+		{ name: 'Spool Full', value: 25 },
+		{ name: 'Spool Empthy', value: 25 },
+		{ name: 'Copper Broken', value: 25 },
+		{ name: 'Machine off', value: 25 },
+		{ name: 'Other', value: 25 },
 	])
 	useEffect(() => {
 
@@ -31,21 +35,25 @@ const Disributepiechar = () => {
 		if (todayTotalRun != undefined) {
 			setRuntime(parseInt(todayTotalRun, 10));
 		}
-		if(current_breaking_time!=undefined){
-			setCurrentdown(parseInt(current_breaking_time,10));
+		if (current_breaking_time != undefined) {
+			setCurrentdown(parseInt(current_breaking_time, 10));
 		}
-		if(current_running_time!=undefined){
-			setCurrentrun(current_running_time,10);
+		if (current_running_time != undefined) {
+			setCurrentrun(current_running_time, 10);
 		}
-	
+
 
 		const interval = setInterval(() => {
 			setUerData([
-			{ name: 'RunTime', value:(runttime+currentrun) },
-			{ name: 'DownTime', value:(currentdown+currentdown)},
-			{ name: 'Remaning', value: 500}
-		])
-		}, 2000)
+				{ name: 'RunTime', value: (runttime + currentrun) },
+				{ name: 'Taype Detect', value: 25 },
+				{ name: 'Spool Full', value: 25 },
+				{ name: 'Spool Empthy', value: 25 },
+				{ name: 'Copper Broken', value: 25 },
+				{ name: 'Machine off', value: 25 },
+				{ name: 'Other', value:  Math.random()*10 },
+			])
+		},60000)
 		return () => clearInterval(interval); // Cleanup on component unmount
 
 	}, [messages])
