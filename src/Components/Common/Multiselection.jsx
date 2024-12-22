@@ -24,8 +24,8 @@ const Multiselection = ({options, onSelectionChange}) => {
                 if(isOpen)onSelectionChange(selectedOptions)
               }
               }
-              className="m-5 text-gray-100 bg-gray-600 rounded-lg px-20 py-3"
-            >
+              
+             className='bg-blue-500 w-[420px] m-3  rounded-lg p-3 lg:w-[200px]'>
               {/* {selectedOptions.length === 0
                 ? 'options'
                 : `${selectedOptions.length} option(s) selected`} */}
@@ -34,12 +34,12 @@ const Multiselection = ({options, onSelectionChange}) => {
       
             {/* Dropdown Menu */}
             {isOpen && (
-              <div className="   absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
+              <div className="  z-3  absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
                 <ul className="max-h-60 overflow-y-auto">
                   {options.map((option) => (
                     <li
                       key={option}
-                      className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer text-black"
                     >
                       <input
                         type="checkbox"
