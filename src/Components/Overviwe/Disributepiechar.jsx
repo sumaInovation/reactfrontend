@@ -4,7 +4,7 @@ import { useWebSocket } from "../Common/WebSocketContext";
 import { useEffect, useState } from "react";
 
 
-const COLORS = ["#00FF53", "#FF0000", "#EC4899","#00FF43", "#0000FF", "#9FE2BF"];
+const COLORS = ["#00FF53", "#FF0000", "#EC4899", "#00FF43", "#0000FF", "#9FE2BF"];
 
 const Disributepiechar = () => {
 	const [runttime, setRuntime] = useState(0);
@@ -12,15 +12,14 @@ const Disributepiechar = () => {
 	const [currentrun, setCurrentrun] = useState(0);
 	const [currentdown, setCurrentdown] = useState(0);
 	const { messages } = useWebSocket();
-	const { todayTotalRun,
-		todatTotalBreake,
-		current_running_time,
-		current_breaking_time } = messages
+	const { start,
+		end,
+		reason } = messages
 
 	const [userData, setUerData] = useState([
 		{ name: 'RunTime', value: 50 },
-		{ name: 'Taype Detect', value: 25 },
-		{ name: 'Spool Full', value: 25 },
+		{ name: 'Tape Detect', value: 25 },
+		{ name: 'Spool Filed', value: 25 },
 		{ name: 'Spool Empthy', value: 25 },
 		{ name: 'Copper Broken', value: 25 },
 		{ name: 'Machine off', value: 25 },
@@ -28,20 +27,9 @@ const Disributepiechar = () => {
 	])
 	useEffect(() => {
 
-		if (todatTotalBreake != undefined) {
-			setDowntime(parseInt(todatTotalBreake, 10));
-		}
-
-		if (todayTotalRun != undefined) {
-			setRuntime(parseInt(todayTotalRun, 10));
-		}
-		if (current_breaking_time != undefined) {
-			setCurrentdown(parseInt(current_breaking_time, 10));
-		}
-		if (current_running_time != undefined) {
-			setCurrentrun(current_running_time, 10);
-		}
-
+		if (reason != undefined) {
+		 
+		   }
 
 		const interval = setInterval(() => {
 			setUerData([
@@ -51,9 +39,9 @@ const Disributepiechar = () => {
 				{ name: 'Spool Empthy', value: 25 },
 				{ name: 'Copper Broken', value: 25 },
 				{ name: 'Machine off', value: 25 },
-				{ name: 'Other', value:  Math.random()*10 },
+				{ name: 'Other', value: Math.random() * 10 },
 			])
-		},60000)
+		}, 60000)
 		return () => clearInterval(interval); // Cleanup on component unmount
 
 	}, [messages])
