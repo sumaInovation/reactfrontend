@@ -126,27 +126,6 @@ const Reports = () => {
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             {/* Default contents */}
             {!isbutton && <div className='lg:flex gap-3 lg:ml-16 '>
                 <Bcard imglink={"https://media.istockphoto.com/id/1171902434/photo/smart-industry-control-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=cpvGEK2EhmFar7c7mRBKbs2N_Yfrc1VPiYF1jiavp38="}
@@ -163,7 +142,7 @@ const Reports = () => {
             </div>}
 
             {/* Display user request report */}
-            {!isloading ? (isbutton && <div className='pl-[450px] w-[50px]'>
+            {!isloading ? (isbutton && <div className='lg:pl-[450px] w-[50px]'>
                 <Button variant="primary" disabled>
                     <Spinner
                         as="span"
