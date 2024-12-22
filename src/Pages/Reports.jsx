@@ -2,13 +2,15 @@ import React, { useState } from 'react'
 import Multiselection from '../Components/Common/Multiselection'
 import DateRangePicker from '../Components/Common/DateRangePicker';
 import { jsPDF } from 'jspdf';
+import Loading from '../Asert/loading.png'
 const Reports = () => {
     const [Result, setResult] = useState([])
-    const options = ['Spool Empthy', 'Spool Full', 'Copper Broken', 'Taype Detect', 'Other', 'Machine Off'];
-    const [selecteitems, setSelecteditems] = useState([options])
+    const options = ["Running Time",'Spool Empthy', 'Spool Full', 'Copper Broken', 'Taype Detect', 'Other', 'Machine Off'];
+    const [selecteitems, setSelecteditems] = useState(null)
     const [StartTime, setStartTime] = useState(null);
     const [EndTime, setEndTime] = useState(null);
     const [isloading,setIsloading]=useState(false);
+    const[isbutton,setisbutton]=useState(false)
 
 
 
@@ -62,11 +64,16 @@ const Reports = () => {
         }
     };
     const HandleHTTP = () => {
-        if (StartTime != undefined && EndTime != undefined) {
+        if (StartTime != undefined && EndTime != undefined && selecteitems!==null) {
+            setisbutton(true)
             fetchData();
 
 
         } else {
+            if(selecteitems==null){
+                alert("Please slect options")
+            }
+            else
             alert("Please Select Valid Time Range")
         }
 
@@ -125,6 +132,7 @@ const Reports = () => {
                         className="m-5 text-gray-100 bg-gray-600 rounded-lg p-3 w-[200px]"
                         onClick={() => {
                             HandleHTTP();
+                            
                         }}
                     >
                         Search
@@ -146,9 +154,9 @@ const Reports = () => {
          
 
             {/* Print Dtat */}
-            {  !isloading?(   <div className="loading-container">
-          <p>Please wait...</p>
-          <img src="https://i.gifer.com/4V0b.gif" alt="Loading..." /> {/* Loading Spinner or Image */}
+            {  !isloading?(   isbutton && <div className="loading-container flex  justify-center">
+          
+          <img src={Loading} alt="Loading..." style={{width:"200px", height:"200px"}}/> {/* Loading Spinner or Image */}
         </div>)  :(<div className="space-y-8 mt-[80px] text-white h-[1000px] ml-4">
                 {/* Grid layout for displaying tables */}
                 <div className="grid grid-cols-1 sm:grid-cols- lg:grid-cols-2 gap-8 ">
@@ -163,6 +171,7 @@ const Reports = () => {
                                         <th className="border border-gray-300 px-4 py-2">Date</th>
                                         <th className="border border-gray-300 px-4 py-2">Start</th>
                                         <th className="border border-gray-300 px-4 py-2">End</th>
+                                        <th className="border border-gray-300 px-4 py-2">Operator</th>
                                         <th className="border border-gray-300 px-4 py-2">Duration(Min)</th>
                                     </tr>
                                 </thead>
@@ -173,12 +182,13 @@ const Reports = () => {
                                             <td className="border border-gray-300 px-4 py-2">{item[0]}</td>
                                             <td className="border border-gray-300 px-4 py-2">{item[1]}</td>
                                             <td className="border border-gray-300 px-4 py-2">{item[2]}</td>
-                                            <td className="border border-gray-300 px-4 py-2">{item[3]}</td>
+                                           <td className="border border-gray-300 px-4 py-2">Unkwon</td>
+                                           <td className="border border-gray-300 px-4 py-2">{item[3]}</td>
                                         </tr>
                                     ))}
 
                                     <tr>
-                                        <td colSpan="3" className="border border-gray-300 px-4 py-2" >Total</td>
+                                        <td colSpan="4" className="border border-gray-300 px-4 py-2" >Total</td>
                                         <td colSpan="3" className="border border-gray-300 px-4 py-2" >{
                                             groupedData[reason].reduce((total, item) => total + parseInt(item[3], 10), 0)
                                         }</td>
