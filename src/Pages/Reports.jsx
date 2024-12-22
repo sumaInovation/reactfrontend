@@ -101,6 +101,7 @@ const Reports = () => {
     };
     return (
         <>
+            <div className='h-[100px]'>
             <div className=' text-white mt-[80px] grid grid-cols-1 lg:grid-cols-5'>
                 <input
                     type="date"
@@ -147,7 +148,7 @@ const Reports = () => {
 
 
             {/* Default contents */}
-            {!isbutton && <div className='lg:flex gap-3 ml-16 '>
+            {!isbutton && <div className='lg:flex gap-3 lg:ml-16 '>
                 <Bcard imglink={"https://media.istockphoto.com/id/1171902434/photo/smart-industry-control-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=cpvGEK2EhmFar7c7mRBKbs2N_Yfrc1VPiYF1jiavp38="}
                     title={"Data Analytics"} content={"You can analysis data by cliking bellow link"}
                     weblink={"./analytics"} />
@@ -222,6 +223,7 @@ const Reports = () => {
                 </div>
             </div>)
             }
+            </div>
         </>
     )
 }

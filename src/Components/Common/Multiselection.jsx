@@ -25,7 +25,7 @@ const Multiselection = ({options, onSelectionChange}) => {
               }
               }
               
-             className='bg-blue-500 w-[420px] m-3  rounded-lg p-3 lg:w-[200px]'>
+             className='bg-blue-500 w-[350px] m-3  rounded-lg p-3 lg:w-[200px]'>
               {/* {selectedOptions.length === 0
                 ? 'options'
                 : `${selectedOptions.length} option(s) selected`} */}
