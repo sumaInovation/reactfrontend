@@ -7,42 +7,43 @@ import { useEffect, useState } from "react";
 const COLORS = ["#00FF53", "#FF0000", "#EC4899", "#00FF43", "#0000FF", "#9FE2BF"];
 
 const Disributepiechar = () => {
-	const [runttime, setRuntime] = useState(0);
-	const [downtime, setDowntime] = useState(0);
-	const [currentrun, setCurrentrun] = useState(0);
-	const [currentdown, setCurrentdown] = useState(0);
+
 	const { messages } = useWebSocket();
 	const { start,
 		end,
 		reason } = messages
 
 	const [userData, setUerData] = useState([
-		{ name: 'RunTime', value: 50 },
-		{ name: 'Tape Detect', value: 25 },
-		{ name: 'Spool Filed', value: 25 },
-		{ name: 'Spool Empthy', value: 25 },
-		{ name: 'Copper Broken', value: 25 },
-		{ name: 'Machine off', value: 25 },
-		{ name: 'Other', value: 25 },
+		{ name: 'IDLE', value: 100 },
+		{ name: 'RUNNING', value: 100 },
+		{ name: 'SPOOL FILED', value: 100 },
+		{ name: 'SPOOL EMPTHY', value: 100 },
+		{ name: 'COPPER BROKEN', value: 100 },
+		{ name: 'OTHERS', value: 100 },
+
 	])
+	const timeToSeconds = (time) => {
+		const [hours, minutes, seconds] = time.split(":").map(Number);
+		return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+	};
+
+	const updateReason = (newValue, reason_name) => {
+		setUerData((prevData) =>
+			prevData.map((item) =>
+				item.name === reason_name ? { ...item, value:item.value+newValue } : item
+			)
+		);
+	};
 	useEffect(() => {
 
 		if (reason != undefined) {
-		 
-		   }
+			const timespand = timeToSeconds(start) - timeToSeconds(end);
+			updateReason(timespand, reason);
+			console.log(reason)
 
-		const interval = setInterval(() => {
-			setUerData([
-				{ name: 'RunTime', value: (runttime + currentrun) },
-				{ name: 'Taype Detect', value: 25 },
-				{ name: 'Spool Full', value: 25 },
-				{ name: 'Spool Empthy', value: 25 },
-				{ name: 'Copper Broken', value: 25 },
-				{ name: 'Machine off', value: 25 },
-				{ name: 'Other', value: Math.random() * 10 },
-			])
-		}, 60000)
-		return () => clearInterval(interval); // Cleanup on component unmount
+		}
+
+
 
 	}, [messages])
 

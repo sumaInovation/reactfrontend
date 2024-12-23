@@ -51,7 +51,7 @@ const LayoutWithSidebar = () => {
   return (
     <>
     <BrowserRouter>
-    <header className='z-50 fixed top-0 left-0 w-full bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg border-b border-gray-700'>
+    <header className=' realative z-50 fixed top-0 left-0 w-full bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg border-b border-gray-700'>
 			<div className='max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between'>
 				<h1 className='text-2xl font-semibold text-gray-100 '>PPT Inovation</h1>
         <p className='lg:hidden text-white'><Menu size={24} onClick={()=>{setMobilenav(!Mobilenav)
@@ -59,6 +59,7 @@ const LayoutWithSidebar = () => {
         }}/></p>
        </div>
 		</header>
+    
     <div className="flex h-screen">
       {/* Sidebar: Fixed on the left with dynamic width */}
      
