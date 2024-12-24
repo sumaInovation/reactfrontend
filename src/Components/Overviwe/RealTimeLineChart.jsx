@@ -6,13 +6,24 @@ const RealTimeLineChart = () => {
 	// State to hold the data points for the chart
 	const [lineData, setLineData] = useState([]);
 	const { messages } = useWebSocket();
-	const { current_breaking_time } = messages
+	const { Length } = messages
 	useEffect(() => {
-    //console.log(current_breaking_time)  // This will update state only once on initial render
+		try{
+
+			const{Length,start,end,reason}= JSON.parse(messages);
+			if(Length!=undefined){
+               		 //console.log(current_breaking_time)  // This will update state only once on initial render
 	const newTime = new Date().toLocaleTimeString(); // Get current time for X-axis
-	const newValue =parseInt(current_breaking_time,10)+Math.random()*100;// Math.floor(Math.random() * 100); // Random value for demo
+	const newValue =parseInt(Length,10);// Math.floor(Math.random() * 100); // Random value for demo
     // Add new data point
 	addData(newTime, newValue);
+			}
+	
+
+		}catch(e){
+         console.log("Cannot real time chart updates due to:",e)
+		}
+   
     }, [messages]);  // Only runs when `messages` changes
 	
 	// Function to simulate adding new data points
