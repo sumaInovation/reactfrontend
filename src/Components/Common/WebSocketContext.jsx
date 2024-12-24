@@ -13,7 +13,7 @@ export const WebSocketProvider = ({ children }) => {
 
   // Create WebSocket client and handle events
   useEffect(() => {
-    const socket = new WebSocket('wss://googlesheet-yuetcisb.b4a.run/'); // Replace with your WebSocket URL
+    const socket = new WebSocket('ws://localhost:5000'); // Replace with your WebSocket URL
 
     // Event listener for when the WebSocket opens
     socket.onopen = () => {
@@ -22,24 +22,21 @@ export const WebSocketProvider = ({ children }) => {
 
     // Event listener for incoming messages
     socket.onmessage = async(event) => {
-      try {
-        const { data } = event;
-
-        if (data instanceof Blob) {
-          // Handle the Blob message
-          //handleBlobMessage(data);
-          console.log(data)
-        } else {
-          // Handle text or JSON messages
-          console.log('Text or JSON message received:', data);
-          setMessages((prevMessages) => [...prevMessages, data]);
-        }
+    try{
       
-
-        
-      } catch (error) {
-        console.log("Error1:", error);
+      const parsedData = JSON.parse(await JSON.parse(event.data));
+      const{Length,start,end,reason}=parsedData;
+      if(Length!=undefined){
+        console.log(Length);
       }
+      if(reason!=undefined){
+        console.log(reason)
+      }
+    }catch(e){
+      console.log("Error :",e);
+    }
+
+       
 
     };
 
