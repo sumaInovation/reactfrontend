@@ -11,13 +11,15 @@ const Overviwepage = () => {
 	const [todatproduction, setTodayproduction] = useState(0);
 	const { messages } = useWebSocket();
 	const[length,setLength]=useState(0)
+	const[previousState,setPreviousState]=useState('IDLE');
    
 	useEffect(() => {
 		try{
-			const{Length,start,end,reason}= JSON.parse(messages);
+			const{Length,start,end,reason,state}= JSON.parse(messages);
 			if(Length!=undefined){
                   setLength(Length)
 			}
+			if(state!=undefined)setIsMachineRun(state)
 		}catch(e){
 			console.log("Error:",e)
 		}

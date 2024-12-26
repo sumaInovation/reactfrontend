@@ -9,10 +9,7 @@ const COLORS = ["#00FF53", "#FF0000", "#EC4899", "#00FF43", "#0000FF", "#9FE2BF"
 const Disributepiechar = () => {
 
 	const { messages } = useWebSocket();
-	const { start,
-		end,
-		reason } = messages
-
+	
 	const [userData, setUerData] = useState([
 		{ name: 'IDLE', value: 100 },
 		{ name: 'RUNNING', value: 100 },
@@ -22,31 +19,28 @@ const Disributepiechar = () => {
 		{ name: 'OTHERS', value: 100 },
 
 	])
-	const timeToSeconds = (time) => {
-		const [hours, minutes, seconds] = time.split(":").map(Number);
-		return parseInt(hours, 10) * 3600 + parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
-	};
 
-	const updateReason = (newValue, reason_name) => {
-		setUerData((prevData) =>
-			prevData.map((item) =>
-				item.name === reason_name ? { ...item, value:item.value+newValue } : item
-			)
-		);
-	};
-	useEffect(() => {
-
-		if (reason != undefined) {
-			const timespand = timeToSeconds(start) - timeToSeconds(end);
-			updateReason(timespand, reason);
-			console.log(reason)
-
-		}
+	 useEffect(()=>{
+		fetch('htpps://googlesheet-yuetcisb.b4a.run/data')  // URL of the resource
+		.then(response => {
+		  if (!response.ok) {
+			throw new Error('Network response was not ok');
+		  }
+		  return response.json();  // Parsing the JSON response
+		})
+		.then(data => {
+		  console.log(data);  // Handle the fetched data
+		})
+		.catch(error => {
+		  console.error('Error fetching data:', error);  // Handle errors
+		});
 
 
+	 })  
+	
 
-	}, [messages])
-
+	  
+	  
 
 	return (
 		<motion.div
