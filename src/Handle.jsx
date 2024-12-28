@@ -1,42 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
 const DataFetcher = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('htpps://googlesheet-yuetcisb.b4a.run');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  async function getData() {
 
-    fetchData();
-  }, []);
+ 
+  }
+   
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+
+
 
   return (
     <div className='text-white'>
-      <h2>Fetched Data:</h2>
-      <ul>
-        {data.map(post => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
+      <h2>{data.message}</h2>
+      <button onClick={getData}>Pressed</button>
     </div>
   );
-};
+};   
 
 export default DataFetcher;

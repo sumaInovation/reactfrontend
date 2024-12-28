@@ -20,18 +20,73 @@ const Disributepiechar = () => {
 
 	])
 
+	 // Function to update the value of 'COPPER BROKEN'
+	 const updateNewValue = (newValue,itemName) => {
+		setUerData((prevData) =>
+		  prevData.map((item) =>
+			item.name === itemName ? { ...item, value: newValue } : item
+		  )
+		);
+	  };
+
 	 
 		useEffect(() => {
-			fetch('htpps://googlesheet-yuetcisb.b4a.run')
-			   .then((res) => res.json())
-			   .then((data) => {
-				  console.log(data);
+			fetch("https://googlesheet-yuetcisb.b4a.run/distributedata")
+			  .then(response => {
+				if (!response.ok) {
+				  throw new Error('Network response was not ok');
+				}
+				return response.json();  // Read the response body as JSON
+			  })
+			  .then(data => {
+				// Now you can work with your parsed JSON data
+				//Processing ncomming data from google sheet
+				const idle = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="IDLE" ? parseInt(item[3],10) : 0);
+				  }, 0);
+
+				const totalCopperBroken = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="COPPER BROKEN" ? parseInt(item[3],10) : 0);
+				  }, 0);
+				  const taypdetect = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="TAPE DETECT" ? parseInt(item[3],10) : 0);
+				  }, 0);
+				  const spoolfull = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="SPOOL FILED" ? parseInt(item[3],10) : 0);
+				  }, 0);
+				  const spoolempty = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="SPOOL EMPTHY" ? parseInt(item[3],10) : 0);
+				  }, 0);
+				  const others = data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="OTHERS" ? parseInt(item[3],10) : 0);
+				  }, 0);
+				  const running= data.reduce((total, item) => {
+					// Add 1 to total if copperbroken is true, 0 if false
+					return total + (item[4]=="RUNNING" ? parseInt(item[3],10) : 0);
+				  }, 0);
 				
-			   })
-			   .catch((err) => {
-				  console.log("message",err.message);
-			   });
-		 });
+				  // Updates newvalue
+				  updateNewValue(running,"RUNNING");
+				  updateNewValue(idle,"IDLE");
+				  updateNewValue(spoolempty,"SPOOL EMPTHY");
+				  updateNewValue(spoolfull,"SPOOL FILED");
+				  updateNewValue(totalCopperBroken,"COPPER BROKEN");
+				  updateNewValue(taypdetect,"TAPE DETECT");
+				  updateNewValue(running,"RUNNING");
+				//console.log(totalCopperBroken);
+			
+			  })
+			  .catch(error => {
+				console.error('There was a problem with the fetch operation:', error);
+			  });
+			
+		 },[]);
 
 	  
 	  

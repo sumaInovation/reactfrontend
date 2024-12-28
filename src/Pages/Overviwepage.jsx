@@ -32,7 +32,7 @@ const Overviwepage = () => {
 	return (
 		
 		<div className='flex-1 overflow-y-auto  p-4 z-0 mt-[75px] '>
-			<Handle/>
+		
 			<main className=' mx-auto py-6 px-4 lg:px-8'>
 				{/* STATS */}
 				<motion.div
