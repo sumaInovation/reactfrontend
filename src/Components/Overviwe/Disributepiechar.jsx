@@ -20,24 +20,18 @@ const Disributepiechar = () => {
 
 	])
 
-	 useEffect(()=>{
-		fetch('htpps://googlesheet-yuetcisb.b4a.run/data')  // URL of the resource
-		.then(response => {
-		  if (!response.ok) {
-			throw new Error('Network response was not ok');
-		  }
-		  return response.json();  // Parsing the JSON response
-		})
-		.then(data => {
-		  console.log(data);  // Handle the fetched data
-		})
-		.catch(error => {
-		  console.error('Error fetching data:', error);  // Handle errors
-		});
-
-
-	 })  
-	
+	 
+		useEffect(() => {
+			fetch('htpps://googlesheet-yuetcisb.b4a.run')
+			   .then((res) => res.json())
+			   .then((data) => {
+				  console.log(data);
+				
+			   })
+			   .catch((err) => {
+				  console.log("message",err.message);
+			   });
+		 });
 
 	  
 	  

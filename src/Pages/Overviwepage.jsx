@@ -5,6 +5,7 @@ import StatCard from '../Components/Common/StatCard'
 import RealTimeLineChart from '../Components/Overviwe/RealTimeLineChart'
 import Disributepiechar from '../Components/Overviwe/Disributepiechar'
 import { useWebSocket } from '../Components/Common/WebSocketContext';
+import Handle from '../Handle'
 
 const Overviwepage = () => {
 	const[IsMachineRun,setIsMachineRun]=useState(false);
@@ -15,7 +16,7 @@ const Overviwepage = () => {
    
 	useEffect(() => {
 		try{
-			const{Length,start,end,reason,state}= JSON.parse(messages);
+			const{Length,start,end,reason,state}=JSON.parse(messages);
 			if(Length!=undefined){
                   setLength(Length)
 			}
@@ -29,8 +30,9 @@ const Overviwepage = () => {
 
 	}, [messages])
 	return (
+		
 		<div className='flex-1 overflow-y-auto  p-4 z-0 mt-[75px] '>
-			
+			<Handle/>
 			<main className=' mx-auto py-6 px-4 lg:px-8'>
 				{/* STATS */}
 				<motion.div
