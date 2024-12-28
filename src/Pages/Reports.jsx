@@ -221,7 +221,7 @@ import Multiselection from '../Components/Common/Multiselection'
 const Reports = () => {
     const [Result, setResult] = useState([])
     const options = ["IDLE","RUNNING","SPOOL FILED","SPOOL EMPTHY","TAPE DETECT","COPPER BROKEN","OTHERS"];
-    const [selecteitems, setSelecteditems] = useState(null)
+    const [selecteitems, setSelecteditems] = useState([])
     const [StartTime, setStartTime] = useState(null);
     const [EndTime, setEndTime] = useState(null);
     const [isloading, setIsloading] = useState(false);
@@ -334,12 +334,12 @@ const Reports = () => {
       
       
       <div className='text-white grid lg:grid-cols-2 grid-cols-1   m-3'>
-      {Tablehead.map(item=><div>
+      {selecteitems.map(item=><div>
        <label className='text-2xl text-green-700 '>
-       {item}
+       {Result.some(i=>i[4]===item) && item}
         </label>
         
-       <table border="1">
+       {Result.some(i=>i[4]===item) && (<table border="1">
         <thead>
           <tr>
            <th style={{ border: '1px solid black', padding: '8px' }}>Date</th>
@@ -361,7 +361,7 @@ const Reports = () => {
         
         ))}
         </tbody>
-      </table>
+      </table>)}
 
 
       </div>)}
