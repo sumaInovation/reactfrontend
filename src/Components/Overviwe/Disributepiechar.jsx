@@ -11,14 +11,18 @@ const Disributepiechar = () => {
 	const { messages } = useWebSocket();
 	
 	const [userData, setUerData] = useState([
-		{ name: 'IDLE', value: 100 },
-		{ name: 'RUNNING', value: 100 },
-		{ name: 'SPOOL FILED', value: 100 },
-		{ name: 'SPOOL EMPTHY', value: 100 },
-		{ name: 'COPPER BROKEN', value: 100 },
-		{ name: 'OTHERS', value: 100 },
+		{ name: 'IDLE', value: 0 },
+		{ name: 'RUNNING', value: 0 },
+		{ name: 'SPOOL FILED', value: 0 },
+		{ name: 'SPOOL EMPTHY', value: 0 },
+		{ name: 'COPPER BROKEN', value: 0 },
+		{ name: 'OTHERS', value: 0 },
 
 	])
+
+
+	    // Filter out data with value 0
+  const filteredData = userData.filter(item => item.value > 0);
 
 	 // Function to update the value of 'COPPER BROKEN'
 	 const updateNewValue = (newValue,itemName) => {
@@ -31,6 +35,7 @@ const Disributepiechar = () => {
 
 	 
 		useEffect(() => {
+			const intervalId = setInterval(() => {
 			fetch("https://googlesheet-yuetcisb.b4a.run/distributedata")
 			  .then(response => {
 				if (!response.ok) {
@@ -39,53 +44,40 @@ const Disributepiechar = () => {
 				return response.json();  // Read the response body as JSON
 			  })
 			  .then(data => {
+				
 				// Now you can work with your parsed JSON data
 				//Processing ncomming data from google sheet
-				const idle = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="IDLE" ? parseInt(item[3],10) : 0);
-				  }, 0);
 
-				const totalCopperBroken = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="COPPER BROKEN" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				  const taypdetect = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="TAPE DETECT" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				  const spoolfull = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="SPOOL FILED" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				  const spoolempty = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="SPOOL EMPTHY" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				  const others = data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="OTHERS" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				  const running= data.reduce((total, item) => {
-					// Add 1 to total if copperbroken is true, 0 if false
-					return total + (item[4]=="RUNNING" ? parseInt(item[3],10) : 0);
-				  }, 0);
-				
-				  // Updates newvalue
-				  updateNewValue(running,"RUNNING");
-				  updateNewValue(idle,"IDLE");
-				  updateNewValue(spoolempty,"SPOOL EMPTHY");
-				  updateNewValue(spoolfull,"SPOOL FILED");
-				  updateNewValue(totalCopperBroken,"COPPER BROKEN");
-				  updateNewValue(taypdetect,"TAPE DETECT");
-				  updateNewValue(running,"RUNNING");
-				//console.log(totalCopperBroken);
+				// Get Reason from incomming data
+				const reason=[];
+				data.map(item=>{
+                  if(!reason.includes(item[4]))reason.push(item[4])
+				})
+			
+				reason.forEach((element, index, array) => {
+
+					updateNewValue (
+						data.reduce((total, item) => {
+							// Add 1 to total if copperbroken is true, 0 if false
+							return total + (item[4]==element ? parseInt(item[3],10) : 0);
+						  }, 0)
+						,
+						element
+					)
+				   
+				  });
+
+
+
+			
 			
 			  })
 			  .catch(error => {
 				console.error('There was a problem with the fetch operation:', error);
 			  });
-			
+			},5000);
+    // Cleanup the interval when the component unmounts
+       return () => clearInterval(intervalId);
 		 },[]);
 
 	  
@@ -103,7 +95,7 @@ const Disributepiechar = () => {
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie
-							data={userData}
+							data={filteredData}
 							cx={"50%"}
 							cy={"50%"}
 							labelLine={false}
