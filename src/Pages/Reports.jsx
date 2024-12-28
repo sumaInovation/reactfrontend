@@ -227,8 +227,13 @@ const Reports = () => {
     const [isloading, setIsloading] = useState(false);
     const [isbutton, setisbutton] = useState(false);
     const[Tablehead,setTableHead]=useState([])
+    const reasonlists=[];
+    
 
-
+    function parseDate(dateString) {
+      const [month, day, year] = dateString.split("/").map(Number);
+      return new Date(year, month - 1, day); // JavaScript months are 0-indexed
+    }
 
         const HandleHTTPS = () => {
         if (StartTime != undefined && EndTime != undefined && selecteitems !== null) {
@@ -269,9 +274,9 @@ const Reports = () => {
     };
 
     const HandleHTTP=async()=>{
+      
         try{
-    
-            fetch("https://googlesheet-yuetcisb.b4a.run/userdata")
+           fetch("https://googlesheet-yuetcisb.b4a.run/userdata")
             .then(response => {
               if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -279,21 +284,19 @@ const Reports = () => {
               return response.json();  // Read the response body as JSON
             })
             .then(data=>{
-                console.log(data)
-                setResult(
-                    data.map(item=>{
+              const filterData=data.filter(item=>
+                (parseDate(item[0])>=parseDate(StartTime) && parseDate(item[0])<=parseDate(EndTime))
+              )
+              setResult(filterData);
 
-                        function parseDate(dateString) {
-                            const [month, day, year] = dateString.split("/").map(Number);
-                            return new Date(year, month - 1, day); // JavaScript months are 0-indexed
-                          }
-                    if(parseDate(item[0])>=parseDate(StartTime) && parseDate(item[0])<=parseDate(EndTime))return item
-                })
-            )
-    
+              filterData.map(item=>{
+                if(!reasonlists.includes(item[4]))reasonlists.push(item[4]);
+               })
+               setTableHead(reasonlists)
+           
             })
             .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
+              console.error('There was111 a problem with the fetch operation:', error);
             });
     
         }catch(error){
@@ -305,53 +308,67 @@ const Reports = () => {
     
 
   return (
-    <div className='mt-[80px] text-white grid grid-cols-1  lg:grid-cols-5 gap-6'>
+    <>
+    <div className='mt-[80px] text-white grid grid-cols-2  lg:grid-cols-5 gap-6'>
       <input
                         type="date"
                         id="start-date"
                         value={StartTime}
                         onChange={(e) => handleDateRangeChange(e, 'start')}
-                        className="rounded-lg bg-green-100 p-3 m-3 text-black"
+                        className="rounded-lg bg-green-100 p-3 m-3 text-black w-[150px] lg:w-[200px]"
                     />
                     <input
                         type="date"
                         id="end-date"
                         value={EndTime}
                         onChange={(e) => handleDateRangeChange(e, 'end')}
-                        className="rounded-lg bg-green-100 p-3 m-3 text-black"
+                        className="rounded-lg bg-green-100 p-3 m-3 text-black w-[150px] lg:w-[200px]"
                     />
 
-      <button className='m-3 text-white rounded-lg p-3 bg-green-600 lg:w-[200px]' onClick={HandleHTTP}>Search</button>
-      <button className='m-3 text-white rounded-lg p-3 bg-green-600 lg:w-[200px]'>Download</button>
+      <button className='m-3 text-white rounded-lg p-3 bg-green-600 w-[150px] lg:w-[200px]' onClick={HandleHTTP}>Search</button>
+      <button className='m-3 text-white rounded-lg p-3 bg-green-600 w-[150px] lg:w-[200px]'>Download</button>
 
       {/* Dropwon */}
       < Multiselection options={options} onSelectionChange={handleSelectionChange} />
-      <p className='text-white'>
-      <div>
-      <h1>Filtered Data List</h1>
-      {/* Display filtered data as a list */}
-    {
+      </div>
+      
+      
+      <div className='text-white grid lg:grid-cols-2 grid-cols-1   m-3'>
+      {Tablehead.map(item=><div>
+       <label className='text-2xl text-green-700 '>
+       {item}
+        </label>
         
-        <table border="1">
+       <table border="1">
         <thead>
           <tr>
-        {Result.map(item=> <th>{item[4]}</th>)}
+           <th style={{ border: '1px solid black', padding: '8px' }}>Date</th>
+           <th style={{ border: '1px solid black', padding: '8px' }}>Start</th>
+           <th style={{ border: '1px solid black', padding: '8px' }}>End</th>
+           <th style={{ border: '1px solid black', padding: '8px' }}>Duration</th>
+           
           </tr>
         </thead>
         <tbody>
-         
+        {Result.map((name, index) => (
+          (item==name[4]) && <tr key={index}>
+          <td style={{ border: '1px solid black', padding: '8px' }}>{name[0]}</td>
+          <td style={{ border: '1px solid black', padding: '8px' }}>{name[1]}</td>
+          <td style={{ border: '1px solid black', padding: '8px' }}>{name[2]}</td>
+          <td style={{ border: '1px solid black', padding: '8px' }}>{name[3]}</td>
+          
+         </tr>
+        
+        ))}
         </tbody>
       </table>
 
 
-
-
-    }
-    </div>
-      </p>
+      </div>)}
       
-      
-    </div>
+      </div>
+      <div className='h-[200px]'></div>
+    </>
   )
 }
 

@@ -19,13 +19,13 @@ const Multiselection = ({options, onSelectionChange}) => {
         return (
           <div className="relative">
             {/* Button to open/close the dropdown */}
-            <button
+            <button 
               onClick={() => {setIsOpen(!isOpen)
                 if(isOpen)onSelectionChange(selectedOptions)
               }
               }
               
-             className='bg-blue-500 w-[350px] m-3  rounded-lg p-3 lg:w-[200px]'>
+             className='bg-blue-500  m-3  rounded-lg p-3 w-[150px] lg:w-[200px]'>
               {/* {selectedOptions.length === 0
                 ? 'options'
                 : `${selectedOptions.length} option(s) selected`} */}
