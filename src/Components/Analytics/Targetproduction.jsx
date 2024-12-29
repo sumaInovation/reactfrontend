@@ -33,6 +33,24 @@ const ThisMonth = [
 
 ];
 
+const HandleHTTP=()=>{
+    // Fetch request
+    fetch("https://googlesheet-yuetcisb.b4a.run/userdata")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the JSON data from the response
+      })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((error) => {
+         console.error(error)
+      });
+
+
+}
 const Targetproduction = () => {
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
@@ -78,9 +96,11 @@ const Targetproduction = () => {
 					className='bg-gray-700 text-white rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500'
 					value={selectedTimeRange}
 					onChange={(e) => {
+						HandleHTTP()
 						setSelectedTimeRange(e.target.value);
 						if (e.target.value == "This Week") {
 							setSelectdatapakage(thisweekdata)
+						
 						}
 						if (e.target.value == "This Month") {
 							setSelectdatapakage(ThisMonth)
@@ -108,7 +128,7 @@ const Targetproduction = () => {
 						/>
 						<Legend />
 						<Area type='monotone' dataKey='Actual' stroke='#8B5CF6' fill='#8B5CF6' fillOpacity={0.3} />
-						<Area type='monotone' dataKey='Target' stroke='#10B981' fill='#10B981' fillOpacity={0.3} />
+						
 					</AreaChart>
 				</ResponsiveContainer>
 			</div>

@@ -6,6 +6,7 @@ import Overviwepage from './Pages/Overviwepage'
 import Analytics from './Pages/Analytics'
 import Productpage from './Pages/Productpage'
 import Reports from './Pages/Reports'
+import DownloadInvoice from './Pages/DownloadInvoice'
 
 import Sidenav from './Components/Common/Sidenav';
 import Smallnav from './Components/Common/Smallnav';
@@ -99,6 +100,7 @@ const LayoutWithSidebar = () => {
          <Route path="/analytics" element={<Analytics/>}/>
          <Route path="/productpage" element={<Productpage/>}/>
          <Route path="reports" element={<Reports/>}/>
+         <Route path="download" element={<DownloadInvoice/>}/>
          
           </Routes>
           <SocialMediaIcons/>
