@@ -1,6 +1,6 @@
 import React from 'react';
 import { Line, Pie } from 'react-chartjs-2';
-import html2pdf from 'html2pdf.js';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,14 +15,14 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
-const Invoice = () => {
+const Invoice = ({lbl,Items,piedata,ldata}) => {
   // Data for the Line Chart (Daily Production)
   const lineData = {
-    labels: ['2023-12-01', '2023-12-02', '2023-12-03', '2023-12-04', '2023-12-05'],
+    labels: lbl,
     datasets: [
       {
         label: 'Daily Production',
-        data: [100, 120, 80, 150, 130],  // Example data
+        data: ldata,  // Example data
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
       }
@@ -31,10 +31,10 @@ const Invoice = () => {
 
   // Data for the Pie Chart (Downtime vs Running Time)
   const pieData = {
-    labels: ['Running Time', 'Machine Fault', 'Unloading', 'Loading'],
+    labels: Items,
     datasets: [
       {
-        data: [50, 20, 10, 20],  // Example data: % distribution of time
+        data: piedata,  // Example data: % distribution of time
         backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
         hoverOffset: 4
       }
@@ -51,14 +51,11 @@ const Invoice = () => {
   ];
 
 
-  const downloadInvoice = () => {
-    const element = document.getElementById('Invoice');
-    html2pdf().from(element).save('Invoice.pdf');
-  };
+  
   return (
     <>
     <div className="container mx-auto p-8 text-white mt-[80px]">
-      <h1 className="text-3xl font-bold text-center mb-8">Production Invoice</h1>
+      <h1 className="text-3xl font-bold text-center mb-8 underline">Analysis Report</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Line Chart */}
@@ -104,12 +101,7 @@ const Invoice = () => {
       </div>
     </div>
      <div className='h-[300px]'>
-     <div id="invoice" className="container mx-auto p-8">
-    {/* Your content */}
-    <button onClick={downloadInvoice} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md">
-      Download Invoice as PDF
-    </button>
-  </div>
+     
      </div>
     </>
   );

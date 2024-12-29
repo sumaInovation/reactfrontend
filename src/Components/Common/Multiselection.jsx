@@ -35,7 +35,7 @@ const Multiselection = ({options, onSelectionChange}) => {
             {/* Dropdown Menu */}
             {isOpen && (
               <div className="  z-3  absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
-                <ul className="max-h-60 overflow-y-auto">
+                <ul className="max-h-80 overflow-y-auto">
                   {options.map((option) => (
                     <li
                       key={option}
