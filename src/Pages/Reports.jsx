@@ -199,6 +199,7 @@ const Reports = () => {
 
   return (
     <>
+    <Test/>
       <div className='mt-[80px] text-white grid grid-cols-1  lg:grid-cols-5 gap-6'>
         <div className='flex'>
           <label htmlFor="start-date" className="block text-white m-3">

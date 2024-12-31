@@ -1,31 +1,28 @@
-import React, { useEffect } from 'react'
-
-const Test = ({data}) => {
+  import React from 'react'
   
-  /// Acum={Date,runtime,downtime}
-  useEffect(()=>{
-    data.reduce((acum,current)=>{
-      if(!acum.some(i=>i.date==current[0])){
-       if(current[4]=="RUNNING"){
-          acum.push({date:current[0],runtime:current[3],downtime:0});
-       }else{
-         acum.push({date:current[0],runtime:0,downtime:current[3]});
-       }
-      }
- 
-       
-         console.log(acum)
-       return acum
-       
- 
- 
-      },[])
+  const Test = () => {
+    return (
+      <div className='mt-[80px] text-white grid lg:grid-cols-5 grid-cols-2'>
+        <input
+            type="date"
+            id="start-date"
 
-  },[])
-     
-return null
-     
+            className="rounded-lg bg-green-100 p-3 m-3 text-black w-[150px] lg:w-[200px]"
+          />
+        <input
+            type="date"
+            id="start-date"
 
-}
-
-export default Test
+            
+            className="rounded-lg bg-green-100 p-3 m-3 text-black w-[150px] lg:w-[200px]"
+          />
+        <button>BUTTON1</button>
+        <button>BUTTON2</button>
+        <button>BUTTON3</button>
+        
+      </div>
+    )
+  }
+  
+  export default Test
+  
