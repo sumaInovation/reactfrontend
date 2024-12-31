@@ -1,78 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
+function App() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const dropdownRef = useRef(null);
 
+  const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
 
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
-const Multiselection = ({options, onSelectionChange}) => {
-    const MultiSelect = ({ options }) => {
-        const [selectedOptions, setSelectedOptions] = useState([]);
-        const [isOpen, setIsOpen] = useState(false);
-      
-        const toggleOption = (option) => {
-          setSelectedOptions((prev) =>
-            prev.includes(option)
-              ? prev.filter((item) => item !== option)
-              : [...prev, option]
-          );
-        };
-      
-        return (
-          <div className="relative">
-            {/* Button to open/close the dropdown */}
-            <button 
-              onClick={() => {setIsOpen(!isOpen)
-                if(isOpen)onSelectionChange(selectedOptions)
-              }
-              }
-              
-             className='bg-blue-500  m-3  rounded-lg p-3 w-[150px] lg:w-[200px]'>
-              {/* {selectedOptions.length === 0
-                ? 'options'
-                : `${selectedOptions.length} option(s) selected`} */}
-                Options
-            </button>
-      
-            {/* Dropdown Menu */}
-            {isOpen && (
-              <div className="  z-3  absolute left-0 mt-2 w-full bg-gray-400 border rounded-md shadow-lg">
-                <ul className="max-h-80 overflow-y-auto">
-                  {options.map((option) => (
-                    <li
-                      key={option}
-                      className="flex items-center px-4 py-2 hover:bg-gray-200 cursor-pointer text-black"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedOptions.includes(option)}
-                        onChange={() =>{{toggleOption(option)
-                           
-                        }
-                        
-                        }}
-                  
-                      />
-                      {option}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        );
-      };
-      
-    
+  const handleOptionChange = (option) => {
+    setSelectedOptions((prevSelected) => {
+      if (prevSelected.includes(option)) {
+        return prevSelected.filter((item) => item !== option);
+      } else {
+        return [...prevSelected, option];
+      }
+    });
+  };
 
-   
-  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false); // Close the dropdown if click is outside
+      }
+    };
+
+    // Attach event listener
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="flex  items-center">
-      <div className="w-64">
-        <MultiSelect options={options} />
-      </div>
+    <div className="relative">
+      {/* Button to toggle the dropdown */}
+      <button
+        onClick={toggleDropdown}
+        className="px-4 py-2 bg-green-500 text-white rounded-md"
+      >
+        Select Options
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div
+          ref={dropdownRef} // Attach ref here
+          className="absolute mt-2 w-48 bg-gray-700 border border-gray-300 rounded-md shadow-lg z-10"
+        >
+          <ul className="max-h-60 overflow-y-auto">
+            {options.map((option) => (
+              <li key={option} className="p-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedOptions.includes(option)}
+                    onChange={() => handleOptionChange(option)}
+                    className="mr-2"
+                  />
+                  {option}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      
     </div>
   );
-};
+}
 
-export default Multiselection;
+export default App;
