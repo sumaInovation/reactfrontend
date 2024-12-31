@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Test = ({data}) => {
-    let DateList=[];
-    DateList.forEach(item=>{
-        DateList.som
-    })
-  return (
+  
+  /// Acum={Date,runtime,downtime}
+  useEffect(()=>{
+    data.reduce((acum,current)=>{
+      if(!acum.some(i=>i.date==current[0])){
+       if(current[4]=="RUNNING"){
+          acum.push({date:current[0],runtime:current[3],downtime:0});
+       }else{
+         acum.push({date:current[0],runtime:0,downtime:current[3]});
+       }
+      }
+ 
+       
+         console.log(acum)
+       return acum
+       
+ 
+ 
+      },[])
 
-    
-    <div>
-      
-      
+  },[])
+     
+return null
+     
 
-
-
-
-
-    </div>
-  )
 }
 
 export default Test

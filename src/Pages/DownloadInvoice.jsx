@@ -75,7 +75,7 @@ const Invoice = ({lbl,Items,piedata,ldata,data}) => {
           </div>
         </div>
       </div>
-      <div className='flex'>
+      <div className='lg:flex'>
       {/* Table */}
       <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Machine Performance Report</h2>
@@ -83,8 +83,9 @@ const Invoice = ({lbl,Items,piedata,ldata,data}) => {
         <thead>
           <tr>
           <th style={{ border: '1px solid black', padding: '8px' }}>Date</th>
-          <th style={{ border: '1px solid black', padding: '8px' }}>Runtime</th>
-          <th style={{ border: '1px solid black', padding: '8px' }}>Downtime</th>
+          <th style={{ border: '1px solid black', padding: '8px' }}>Runtime(Min)</th>
+          <th style={{ border: '1px solid black', padding: '8px' }}>Downtime(Min)</th>
+          <th style={{ border: '1px solid black', padding: '8px' }}>Effiecncy(%)</th>
           </tr>
         </thead>
         <tbody>
@@ -92,8 +93,13 @@ const Invoice = ({lbl,Items,piedata,ldata,data}) => {
           {data.map((entry, index) => (
             <tr key={index}>
               <td style={{ border: '1px solid black', padding: '8px' }}>{entry[0]}</td>
-              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[3]}</td>
-              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[0]}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[1]}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[2]}</td>
+               <td style={{ border: '1px solid black', padding: '8px' }}>{
+               
+                   ((parseInt(entry[1],10)/(parseInt(entry[1],10)+parseInt(entry[2],10)))*100).toFixed(2)
+               
+               }</td>
             </tr>
           ))}
         </tbody>

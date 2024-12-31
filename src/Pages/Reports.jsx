@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Bcard from '../Components/Common/Boostrapcard'
 import DownloadInvoice from '../Pages/DownloadInvoice'
 import html2pdf from 'html2pdf.js';
+import Test from './Test'
 
 const Reports = () => {
   const [Result, setResult] = useState([])
@@ -25,19 +26,20 @@ const Reports = () => {
   const handleExport = () => {
     const element = printRef.current;
 
-          // Define PDF options
+    // Define PDF options
     const options = {
       filename: 'exported-content.pdf', // The name of the file
       image: { type: 'jpeg', quality: 0.98 }, // Image quality and type
       html2canvas: {
-        scale: 5, 
+        scale: 5,
         backgroundColor: "#f0f0f0",  // Ensures background color is applied
       },
-      jsPDF: { unit: 'mm', 
-        format: 'a4', 
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
         orientation: 'portrait',
         margin: { top: 5 },  // Top margin for the PDF 
-         
+
       },
     };
 
@@ -48,7 +50,7 @@ const Reports = () => {
       .set(options)  // Set the options (file name, image quality, etc.)
       .save();       // Save the PDF file
   };
-     
+
 
   function generateDateRange(startDate, endDate) {
     const dateArray = [];
@@ -73,26 +75,28 @@ const Reports = () => {
 
 
   const HandleDownload = () => {
-    if(userSearch){//if user pressed serch after only you can togle elese not efect
-    setisAnalys(!isAnalys);//Togle analysis report to raw data
-    setPiedatas([]);
-    selecteitems.forEach((i, index) => {
-      const R = Result
-        .filter(j => j[4] === i) // Filter where id is 1
-        .reduce((sum, j) => sum + parseInt(j[3], 10), 0) // Sum the values
-      setPiedatas(prev => [...prev, R]);
-    })
-    //Linechart calculation
-    setlinedatas([]);//initially reset
-    generateDateRange(StartTime, EndTime).forEach(i => {
-      const total = Result.filter(j => (j[0] == i && j[4] == "RUNNING"))
-        .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue[3], 10), 0);
-      setlinedatas(prev => [...prev, total])//Updates
 
-    })
-  }else{
-    alert("Please Search First!")
-  }
+    if (userSearch) {//if user pressed serch after only you can togle elese not efect
+     
+      setisAnalys(!isAnalys);//Togle analysis report to raw data
+      setPiedatas([]);
+      selecteitems.forEach((i, index) => {
+        const R = Result
+          .filter(j => j[4] === i) // Filter where id is 1
+          .reduce((sum, j) => sum + parseInt(j[3], 10), 0) // Sum the values
+        setPiedatas(prev => [...prev, R]);
+      })
+      //Linechart calculation
+      setlinedatas([]);//initially reset
+      generateDateRange(StartTime, EndTime).forEach(i => {
+        const total = Result.filter(j => (j[0] == i && j[4] == "RUNNING"))
+          .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue[3], 10), 0);
+        setlinedatas(prev => [...prev, total])//Updates
+
+      })
+    } else {
+      alert("Please Search First!")
+    }
 
   }
   // Function to handle the selection change from the child multiselection
@@ -101,10 +105,10 @@ const Reports = () => {
     setSelecteditems(option)
     setResult([]);
     setSearch(false);
-    if(StartTime!=null && EndTime!=null){
+    if (StartTime != null && EndTime != null) {
       setSerchbit(true);
-    }else{setSerchbit(false)}
-  
+    } else { setSerchbit(false) }
+
 
 
 
@@ -115,19 +119,19 @@ const Reports = () => {
     const value = event.target.value;
     if (type === 'start') {
       setStartTime(new Date(value).toLocaleDateString())
-      if(EndTime!=null && selecteitems.length>0){setSerchbit(true)}else{setSerchbit(false)}
+      if (EndTime != null && selecteitems.length > 0) { setSerchbit(true) } else { setSerchbit(false) }
     } else {
       setEndTime(new Date(value).toLocaleDateString())
-      if(StartTime!=null && selecteitems.length>0){setSerchbit(true)}else{setSerchbit(false)}
+      if (StartTime != null && selecteitems.length > 0) { setSerchbit(true) } else { setSerchbit(false) }
 
     }
-      setSearch(false); 
-      
+    setSearch(false);
+
 
   };
 
   const HandleHTTP = async () => {
-    if (StartTime != null && EndTime != null && selecteitems.length>0) {
+    if (StartTime != null && EndTime != null && selecteitems.length > 0) {
       try {
         setSearch(true)
         setIsloading(false);
@@ -168,6 +172,31 @@ const Reports = () => {
 
 
 
+
+  const value = Result.reduce((acc, current) => {
+    if (!acc.some(i => i[0] == current[0])) {
+      acc.push([current[0], 0, 0])
+    }
+
+    acc.forEach((j, index) => {
+      if (j[0] == current[0]) {
+        if (current[4] == "RUNNING") {
+          acc[index][1] += parseInt(current[3], 10)
+        } else {
+          acc[index][2] += parseInt(current[3], 10)
+        }
+      }
+    })
+    return acc
+  }, []);
+
+
+
+
+
+
+
+
   return (
     <>
       <div className='mt-[80px] text-white grid grid-cols-1  lg:grid-cols-5 gap-6'>
@@ -196,16 +225,16 @@ const Reports = () => {
 
         </div>
         {/* Dropwon */}
-        < Multiselection options={options} onSelectionChange={handleSelectionChange}  />
+        < Multiselection options={options} onSelectionChange={handleSelectionChange} />
         <button className={`m-3 text-white rounded-lg p-3 bg-green-600 w-[150px] lg:w-[200px]
           `}
           onClick={HandleHTTP}
-          
+
         >Search</button>
         <button className={`m-3 text-white rounded-lg p-3 bg-green-600 w-[150px] lg:w-[200px]
           `}
           onClick={HandleDownload}
-          //disabled={!downloadbit} // Button is disabled if no value is entered
+        //disabled={!downloadbit} // Button is disabled if no value is entered
         >{!isAnalys ? "Analys" : "Row Data"}</button>
       </div>
       {/* Switch page parts */}
@@ -236,7 +265,7 @@ const Reports = () => {
             <div>
               <div ref={printRef}>
                 {/* Part1 */}
-                <DownloadInvoice lbl={lineLbel} Items={selecteitems} piedata={piedatas} ldata={linedatas} data={Result.filter(item=>item[4]=="RUNNING")  }/>
+                <DownloadInvoice lbl={lineLbel} Items={selecteitems} piedata={piedatas} ldata={linedatas} data={value} />
                 {/* Part1 end */}
               </div>
             </div>
@@ -291,7 +320,7 @@ const Reports = () => {
 
       }
       <div className='h-[200px] text-white'>
-      <button onClick={handleExport} style={{ marginTop: '20px' }}>
+        <button onClick={handleExport} style={{ marginTop: '20px' }}>
           Export to PDF
         </button>
 
