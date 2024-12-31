@@ -6,15 +6,17 @@ import { Button } from 'bootstrap';
 const Reports = () => {
   const [sectiontogle, setSectiontogle] = useState(0);
   const [Result, setResult] = useState([]);
+  const [linedata, setLinedata] = useState([]);
+  const [piedata, setPiedata] = useState([]);
   const [selectedItem, setSelectedItems] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndtDate] = useState(null);
   const options = ["IDLE", "RUNNING", "SPOOL FILED", "SPOOL EMPTHY", "TAPE DETECT", "COPPER BROKEN", "OTHERS"];
-  const handleParameterFromChild = async(startDate, endDate, selectedOptions) => {
-          setStartDate(new Date(startDate).toLocaleDateString());
-          setEndtDate(new Date(endDate).toLocaleDateString());
-          setSelectedItems(selectedOptions);
-          }
+  const handleParameterFromChild = async (startDate, endDate, selectedOptions) => {
+    setStartDate(new Date(startDate).toLocaleDateString());
+    setEndtDate(new Date(endDate).toLocaleDateString());
+    setSelectedItems(selectedOptions);
+  }
   function generateDateRange(startDate, endDate) {
     const dateArray = [];
 
@@ -38,7 +40,7 @@ const Reports = () => {
 
 
   const handleHTTPRequest = async () => {
-        
+
     if (startDate != null && endDate != null && selectedItem.length > 0) {
       setSectiontogle(3)
       try {
@@ -70,34 +72,78 @@ const Reports = () => {
 
 
   }
+  const value = Result.reduce((acc, current) => {
+    if (!acc.some(i => i[0] == current[0])) {
+      acc.push([current[0], 0, 0])
+    }
+
+    acc.forEach((j, index) => {
+      if (j[0] == current[0]) {
+        if (current[4] == "RUNNING") {
+          acc[index][1] += parseInt(current[3], 10)
+        } else {
+          acc[index][2] += parseInt(current[3], 10)
+        }
+      }
+    })
+    return acc
+  }, []);
+
+  const UpdatePiechart = () => {
+    setPiedata([]);//Empthy piedata
+    selectedItem.forEach(item => {
+      setPiedata(prev => [...prev, Result.filter(i => i[4] == item).reduce((acc, currentvalue) => {
+        acc += parseInt(currentvalue[3], 10)
+        return acc
+      }, 0)])
+
+    })
+
+  }
+  const UpdateLinechart=()=>{
+    setLinedata([]);
+    generateDateRange(startDate, endDate).forEach(i=>{
+      const total = Result.filter(j => (j[0] == i && j[4] == "RUNNING"))
+    .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue[3], 10), 0);
+    setLinedata(prev=>[...prev,total]);
+    console.log(linedata)
+    })
+    
+    
+  }
+
   return (
     <>
       {/*Secondary Navbar */}
       <div className='  flex  justify-around  mt-[80px] p-5'>
-      <div>
-        <Parameternav onDataChange={handleParameterFromChild}/>
-        
-      
+        <div>
+          <Parameternav onDataChange={handleParameterFromChild} />
+
+
+        </div>
+        <div >
+          <button onClick={() => {
+            handleHTTPRequest();
+
+          }}
+            className="text-1xl rounded-lg bg-green-500 p-3 text-white">GET REPORT</button>
+        </div>
+        <div >
+          <button onClick={() => {
+            UpdateLinechart();
+            UpdatePiechart();
+            if (sectiontogle == 1) { setSectiontogle(2) }
+            else if (sectiontogle == 2) {
+              setSectiontogle(1)
+              
+            }
+            
+          }}
+
+            className="text-1xl rounded-lg bg-green-500 p-3 text-white">{sectiontogle == 1 ? "Anaylise" : "Row Data"}</button>
+        </div>
       </div>
-      <div >
-        <button  onClick={()=>{
-          handleHTTPRequest();
-          
-        }}
-        className="text-1xl rounded-lg bg-green-500 p-3 text-white">GET REPORT</button>
-      </div>
-      <div >
-        <button onClick={()=>{
-          if(sectiontogle==1){setSectiontogle(2)}
-          else if(sectiontogle==2){
-            setSectiontogle(1)
-          }
-        }}
-        
-        className="text-1xl rounded-lg bg-green-500 p-3 text-white">{sectiontogle==1?"Anaylise":"Row Data"}</button>
-      </div>
-      </div>
-      
+
       {/* Main Section */}
 
       {sectiontogle == 0 ? <div>
@@ -145,11 +191,11 @@ const Reports = () => {
                       <tr>
                         <td style={{ border: '1px solid black', padding: '8px' }} colSpan="3">Totlal</td>
                         <td style={{ border: '1px solid black', padding: '8px' }} >{
-                           Result
-                           .filter(j => j[4] === item)
-                           .reduce((sum, j) => sum + parseInt(j[3], 10), 0)
+                          Result
+                            .filter(j => j[4] === item)
+                            .reduce((sum, j) => sum + parseInt(j[3], 10), 0)
 
-                          }</td>
+                        }</td>
                       </tr>
                     </tbody>
                   </table>)}
@@ -157,12 +203,14 @@ const Reports = () => {
             </div>
 
           </div>
-
+    
 
         </div>
           : sectiontogle == 2 ? <div>
             {/* sectiontogle=2*/}
-            <DownloadInvoice lbl={generateDateRange(startDate,endDate)} Items={selectedItem} piedata={[]} ldata={[]} data={[]} />
+            <DownloadInvoice lbl={generateDateRange(startDate, endDate)} Items={selectedItem} 
+            piedata={piedata} ldata={linedata} data={value}
+            Sdate={ startDate} Edate={endDate} />
           </div>
             : sectiontogle == 3 ?
               <div>

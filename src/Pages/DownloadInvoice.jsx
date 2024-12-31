@@ -15,7 +15,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
 
-const Invoice = ({lbl,Items,piedata,ldata,data}) => {
+const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
   // Data for the Line Chart (Daily Production)
   const lineData = {
     labels: lbl,
@@ -36,27 +36,29 @@ const Invoice = ({lbl,Items,piedata,ldata,data}) => {
     datasets: [
       {
         data: piedata,  // Example data: % distribution of time
-        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0'],
+        backgroundColor: [
+          '#36A2EB',  // Blue
+          '#FF6384',  // Red
+          '#FF9F40',  // Orange
+          '#FFCD56',  // Yellow
+          '#4BC0C0',  // Teal
+          '#9966FF',  // Purple
+          '#FFB6B9',  // Pink
+          '#C9CBCF'   // Gray
+        ],
         hoverOffset: 4
       }
     ]
   };
 
-  // Table Data (Daily Downtime, Total Downtime, Runtime)
-  const tableData = [
-    { date: '2023-12-01', downtime: 2, runtime: 22, totalDowntime: 2 },
-    { date: '2023-12-02', downtime: 1.5, runtime: 23.5, totalDowntime: 3.5 },
-    { date: '2023-12-03', downtime: 3, runtime: 21, totalDowntime: 6.5 },
-    { date: '2023-12-04', downtime: 1, runtime: 24, totalDowntime: 7.5 },
-    { date: '2023-12-05', downtime: 2, runtime: 22, totalDowntime: 9.5 }
-  ];
+  
 
 
   
   return (
     <>
     <div className="container mx-auto p-8 text-white  bg-gray-900">
-      <h1 className="text-3xl font-bold text-center mb-8 underline">Analysis Report</h1>
+      <h1 className="lg:text-3xl text-xl font-bold text-center mb-8 ">Analysis Report</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Line Chart */}
