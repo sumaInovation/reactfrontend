@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-function App() {
+function App({onValueChange}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const dropdownRef = useRef(null);
 
-  const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
+  const options = ["IDLE", "RUNNING", "SPOOL FILED", "SPOOL EMPTHY", "TAPE DETECT", "COPPER BROKEN", "OTHERS"];
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -19,13 +19,18 @@ function App() {
         return [...prevSelected, option];
       }
     });
+    
+   return 0;
   };
 
   // Close dropdown when clicking outside
   useEffect(() => {
+    onValueChange(selectedOptions);//update parent user selectedoptions
     const handleClickOutside = (event) => {
+      
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false); // Close the dropdown if click is outside
+      
       }
     };
 
@@ -36,7 +41,7 @@ function App() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [selectedOptions,onValueChange]);
 
   return (
     <div className="relative">
@@ -54,7 +59,7 @@ function App() {
           ref={dropdownRef} // Attach ref here
           className="absolute mt-2 w-48 bg-gray-700 border border-gray-300 rounded-md shadow-lg z-10"
         >
-          <ul className="max-h-60 overflow-y-auto">
+          <ul className="max-h-80 overflow-y-auto text-sm text-black">
             {options.map((option) => (
               <li key={option} className="p-2">
                 <label className="flex items-center">
@@ -72,7 +77,7 @@ function App() {
         </div>
       )}
 
-      
+       
     </div>
   );
 }
