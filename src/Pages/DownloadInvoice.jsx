@@ -91,9 +91,9 @@ const Invoice = ({lbl,Items,piedata,ldata,data}) => {
           {/* Render each row from the data array */}
           {data.map((entry, index) => (
             <tr key={index}>
-              <td style={{ border: '1px solid black', padding: '8px' }}>{entry.date}</td>
-              <td style={{ border: '1px solid black', padding: '8px' }}>{entry.runtime}</td>
-              <td style={{ border: '1px solid black', padding: '8px' }}>{entry.downtime}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[0]}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[3]}</td>
+              <td style={{ border: '1px solid black', padding: '8px' }}>{entry[0]}</td>
             </tr>
           ))}
         </tbody>

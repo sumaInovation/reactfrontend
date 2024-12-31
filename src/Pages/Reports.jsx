@@ -236,7 +236,7 @@ const Reports = () => {
             <div>
               <div ref={printRef}>
                 {/* Part1 */}
-                <DownloadInvoice lbl={lineLbel} Items={selecteitems} piedata={piedatas} ldata={linedatas} data={[{Date:"2024/12/30",runtime:120,downtime:10}]}/>
+                <DownloadInvoice lbl={lineLbel} Items={selecteitems} piedata={piedatas} ldata={linedatas} data={Result.filter(item=>item[4]=="RUNNING")  }/>
                 {/* Part1 end */}
               </div>
             </div>
