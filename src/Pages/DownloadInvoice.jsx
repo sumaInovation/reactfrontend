@@ -1,5 +1,6 @@
 import React from 'react';
 import { Line, Pie } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import {
   Chart as ChartJS,
@@ -13,29 +14,47 @@ import {
   ArcElement
 } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement,ChartDataLabels);
 
-const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
+const Invoice = ({Linedata,Piedata,Tabledata}) => {
   // Data for the Line Chart (Daily Production)
   const lineData = {
-    labels: lbl,
+    labels: Object.keys(Linedata),
     datasets: [
       {
         label: 'Daily Production',
-        data: ldata,  // Example data
+        data: Object.values(Linedata),  // Example data
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
       },
       
     ]
   };
+  const options = {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Machine Status Over Time',
+      },
+    },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: 'Cable Length(M)',
+        },
+      },
+    },
+  };
+  
 
   // Data for the Pie Chart (Downtime vs Running Time)
   const pieData = {
-    labels: Items,
+    labels: Object.keys(Piedata),
     datasets: [
       {
-        data: piedata,  // Example data: % distribution of time
+        data: Object.values(Piedata),  // Example data: % distribution of time
         backgroundColor: [
           '#36A2EB',  // Blue
           '#FF6384',  // Red
@@ -51,6 +70,30 @@ const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
     ]
   };
 
+  const options1 = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => {
+            return `${tooltipItem.label}: ${tooltipItem.raw} units`;
+          },
+        },
+      },
+      datalabels: {
+        color: '#fff', // Text color for the data labels
+        formatter: (value, context) => {
+          // Calculate percentage
+          const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+          const percentage = ((value / total) * 100).toFixed(2);
+          return `${percentage}%`; // Display percentage
+        },
+        font: {
+          weight: 'bold', // Bold font for the labels
+        },
+      },
+    },
+  };
   
 
 
@@ -65,7 +108,7 @@ const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-4">Daily Production</h3>
           <div className="w-96 h-96">
-            <Line data={lineData} />
+            <Line data={lineData} options={options} />
           </div>
         </div>
 
@@ -73,7 +116,7 @@ const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
         <div className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-4">Running Time vs Downtime</h3>
           <div className="w-80 h-80">
-            <Pie data={pieData} />
+            <Pie data={pieData}  options={options1}/>
           </div>
         </div>
       </div>
@@ -92,7 +135,7 @@ const Invoice = ({lbl,Items,piedata,ldata,data,Sdate,Edate}) => {
         </thead>
         <tbody>
           {/* Render each row from the data array */}
-          {data.map((entry, index) => (
+          {Tabledata.map((entry, index) => (
             <tr key={index}>
               <td style={{ border: '1px solid black', padding: '8px' }}>{entry[0]}</td>
               <td style={{ border: '1px solid black', padding: '8px' }}>{entry[1]}</td>

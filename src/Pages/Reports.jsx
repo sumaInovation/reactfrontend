@@ -6,8 +6,8 @@ import { Button } from 'bootstrap';
 const Reports = () => {
   const [sectiontogle, setSectiontogle] = useState(0);
   const [Result, setResult] = useState([]);
-  const [linedata, setLinedata] = useState([]);
-  const [piedata, setPiedata] = useState([]);
+  const [linedata, setLinedata] = useState({});
+  const [piedata, setPiedata] = useState({});
   const [selectedItem, setSelectedItems] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndtDate] = useState(null);
@@ -90,26 +90,27 @@ const Reports = () => {
   }, []);
 
   const UpdatePiechart = () => {
-    setPiedata([]);//Empthy piedata
-    selectedItem.forEach(item => {
-      setPiedata(prev => [...prev, Result.filter(i => i[4] == item).reduce((acc, currentvalue) => {
-        acc += parseInt(currentvalue[3], 10)
-        return acc
-      }, 0)])
+    const myvalue = selectedItem.reduce((acc, item) => {
+      if (acc[item] == null) acc[item] = 0;
+      acc[item] = Result.reduce((prev, current) => {
+        if (current[4] == item) prev += parseInt(current[3], 10);
+        return prev;
+      }, 0)
+      return acc;
 
-    })
-
+    }, {})
+    setPiedata(myvalue);
   }
-  const UpdateLinechart=()=>{
-    setLinedata([]);
-    generateDateRange(startDate, endDate).forEach(i=>{
-      const total = Result.filter(j => (j[0] == i && j[4] == "RUNNING"))
-    .reduce((accumulator, currentValue) => accumulator + parseInt(currentValue[3], 10), 0);
-    setLinedata(prev=>[...prev,total]);
-    console.log(linedata)
-    })
-    
-    
+  const UpdateLinechart = () => {
+    const grouped = Result.reduce((acc, item) => {
+      const key = item[0];
+      if (acc[key] == null) acc[key] = 0;
+      if (item[4] == "RUNNING")
+        acc[key] += parseInt(item[3], 10);
+      return acc
+    }, {})
+
+    setLinedata(grouped);
   }
 
   return (
@@ -135,12 +136,12 @@ const Reports = () => {
             if (sectiontogle == 1) { setSectiontogle(2) }
             else if (sectiontogle == 2) {
               setSectiontogle(1)
-              
+
             }
-            
+
           }}
 
-            className="text-1xl rounded-lg bg-green-500 p-3 text-white">{sectiontogle == 1 ? "Anaylise" : "Row Data"}</button>
+            className="text-1xl rounded-lg bg-green-500 p-3 text-white">{sectiontogle == 1 ? "Graphycal" : "Row Data"}</button>
         </div>
       </div>
 
@@ -203,14 +204,12 @@ const Reports = () => {
             </div>
 
           </div>
-    
+
 
         </div>
           : sectiontogle == 2 ? <div>
             {/* sectiontogle=2*/}
-            <DownloadInvoice lbl={generateDateRange(startDate, endDate)} Items={selectedItem} 
-            piedata={piedata} ldata={linedata} data={value}
-            Sdate={ startDate} Edate={endDate} />
+            <DownloadInvoice Tabledata={value}Linedata={linedata} Piedata={piedata} />
           </div>
             : sectiontogle == 3 ?
               <div>
